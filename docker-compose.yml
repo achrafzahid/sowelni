@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./darija-transcriber-backend
+      dockerfile: Dockerfile
+    container_name: darija_asr_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Optional: Bind-mount your production model directory so you don't have to rebuild the image if you update weights
+      - ./darija-transcriber-backend/darija-asr-production:/app/darija-asr-production
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY} # Passes your environmental key to the model call pipeline
+    restart: unless-stopped
+    networks:
+      - transcriber_net
+    # If your local deployment machine has an NVIDIA GPU and you want lightning-fast real-time inference,
+    # uncomment the deploy block below (requires nvidia-container-toolkit installed on the host)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  frontend:
+    build:
+      context: ./darija-transcriber-frontend
+      dockerfile: Dockerfile
+    container_name: darija_asr_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - transcriber_net
+
+networks:
+  transcriber_net:
+    driver: bridge
