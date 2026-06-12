@@ -45,7 +45,7 @@ Thumbs.db
 
 .venv
 __pycache__
-*.env*
+*.env
 setup*
 .vs*
 model/
