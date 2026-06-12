@@ -186,7 +186,7 @@ Built on `node:20-alpine`. Runs `setup-frontend.sh` during the image build to sc
 ### With Docker (recommended)
 
 ```bash
-git clone <your-repo-url> darija-asr-project
+git clone https://github.com/achrafzahid/sowelni darija-asr-project
 cd darija-asr-project
 
 cp backend/.env.example backend/.env
